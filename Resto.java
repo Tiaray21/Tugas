@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 class Menu {
-    // berisikan daftar menu (minuman, dan makanan) beserta harganya
+    // berisikan daftar menu (makanan, dan minuman) beserta harganya
     String[] food = { "Bubur Ayam", "Kerupuk", "Nasi Kuning", "Soto" };
     String[] drink = { "Air Mineral", "Es Jeruk Kecil", "Es Teh", "Kopi" };
 
