@@ -4,6 +4,16 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 
+
+class Menu {
+    // berisikan daftar menu (minuman, dan makanan) beserta harganya
+    String[] food = { "Bubur Ayam", "Kerupuk", "Nasi Kuning", "Soto" };
+    String[] drink = { "Air Mineral", "Es Jeruk Kecil", "Es Teh", "Kopi" };
+
+    double[] foodP = { 15000.0, 10000.0, 18000.0, 18000.0 };
+    double[] drinkP = { 7000.0, 10000.0, 7000.0, 8000.0 };
+}
+
 public class Resto {
 
     public static void main(String[] args) {
@@ -241,13 +251,4 @@ public class Resto {
         // melakukan format terhadap nilai berupa angka/harga
         return "Rp " + (long) amount;
     }
-}
-
-class Menu {
-    // berisikan daftar menu (minuman, dan makanan) beserta harganya
-    String[] food = { "Bubur Ayam", "Kerupuk", "Nasi Kuning", "Soto" };
-    String[] drink = { "Air Mineral", "Es Jeruk Kecil", "Es Teh", "Kopi" };
-
-    double[] foodP = { 15000.0, 10000.0, 18000.0, 18000.0 };
-    double[] drinkP = { 7000.0, 10000.0, 7000.0, 8000.0 };
 }
