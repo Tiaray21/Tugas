@@ -242,7 +242,7 @@ public class Resto {
             System.out.printf("%-45s %s%n", "Discount (10%):", formatCurrency(discount));
             total -= discount;
             String formattedTotalAfterDiscount = formatCurrency(total);
-            System.out.printf("%-45s %s%n", "Total akhir:", formattedTotalAfterDiscount);
+            System.out.printf("%-45s %s%n", "Total:", formattedTotalAfterDiscount);
         }
     }
 
