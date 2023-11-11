@@ -453,31 +453,4 @@ public class RestoApp {
             restoMenu.drinkP[menuIndex - restoMenu.getFood().length] = newPrice;
         }
     }
-
-    private static void removeMenu(Scanner scanner, RestoMenu restoMenu) {
-        System.out.println("\n----- Daftar Menu -----");
-        displayNumbering(restoMenu);
-
-        System.out.print("Masukkan nomor: ");
-        int menuNumber = scanner.nextInt();
-        scanner.nextLine();
-
-        int menuIndex = getMenuIndexByNumber(menuNumber, restoMenu);
-
-        if (menuIndex != -1) {
-            System.out.print("Apakah Anda yakin ingin menghapus menu ini? (Ya/Tidak): ");
-            String confirmation = scanner.nextLine();
-
-            if (confirmation.equalsIgnoreCase("Ya")) {
-                restoMenu.removeMenuItem(menuIndex);
-                System.out.println("Menu telah dihapus");
-            } else if (confirmation.equalsIgnoreCase("Tidak")) {
-                System.out.println("Penghapusan dibatalkan");
-            } else {
-                System.out.println("Invalid");
-            }
-        } else {
-            System.out.println("Menu tidak sesuai.");
-        }
-    }
 }
