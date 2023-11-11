@@ -389,7 +389,6 @@ public class RestoApp {
     }
 
     private static void changePrice(Scanner scanner, RestoMenu restoMenu) {
-        System.out.println("\n----- Daftar Menu -----");
         displayNumbering(restoMenu);
 
         System.out.print("Masukkan nomor: ");
@@ -420,7 +419,6 @@ public class RestoApp {
     }
 
     private static void deleteMenu(Scanner scanner, RestoMenu restoMenu) {
-        System.out.println("\n----- Daftar Menu -----");
         displayNumbering(restoMenu);
 
         System.out.print("Masukkan nomor: ");
