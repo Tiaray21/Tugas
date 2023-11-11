@@ -369,7 +369,7 @@ public class RestoApp {
         System.out.print("Masukkan nama menu baru: ");
         String newName = scanner.nextLine();
 
-        System.out.print("Masukkan harga dari: " + newName);
+        System.out.print("Masukkan harga dari " + newName + ": ");
         double newPrice = scanner.nextDouble();
         scanner.nextLine();
 
