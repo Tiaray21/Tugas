@@ -255,7 +255,7 @@ public class RestoApp {
             switch (choice) {
                 case 1:
                     // Membuat pesanan
-                    displayNumbering(restoMenu);
+                    restoMenu.displayMenu();
                     restoMenu.getOrder(scanner, order);
 
                     double subtotal = restoMenu.calculateTotal(order);
