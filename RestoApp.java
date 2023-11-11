@@ -1,375 +1,483 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Arrays;
 
 class RestoMenu {
-    String[] food = { "Bubur Ayam", "Kerupuk", "Nasi Kuning", "Soto" };
-    String[] drink = { "Air Mineral", "Es Jeruk Kecil", "Es Teh", "Kopi" };
+    private String[] food = {"Bubur Ayam", "Kerupuk", "Nasi Kuning", "Soto"};
+    public String[] drink = {"Air Mineral", "Es Jeruk Kecil", "Es Teh", "Kopi"};
 
-    double[] foodP = { 15000.0, 10000.0, 18000.0, 18000.0 };
-    double[] drinkP = { 7000.0, 10000.0, 7000.0, 8000.0 };
-}
+    private double[] foodP = {15000.0, 10000.0, 18000.0, 18000.0};
+    public double[] drinkP = {7000.0, 10000.0, 7000.0, 8000.0};
 
-public class RestoApp {
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        RestoMenu restoMenu = new RestoMenu();
-
-        while (true) {
-            System.out.println("Silahkan pilih opsi yang diinginkan:");
-            System.out.println("1. Pemesanan");
-            System.out.println("2. Pengelolaan Menu");
-            System.out.println("3. Keluar");
-
-            System.out.print("Masukan pilihan: ");
-            int choice = getIntInput(scanner);
-
-            switch (choice) {
-                case 1:
-                    custOrder(scanner, restoMenu);
-                    break;
-                case 2:
-                    setMenu(scanner, restoMenu);
-                    break;
-                case 3:
-                    System.out.println("Sistem ditutup");
-                    scanner.close();
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid");
-            }
-        }
+    public String[] getFood() {
+        return food;
     }
 
-    private static int getIntInput(Scanner scanner) {
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter a number.");
-            scanner.next();
-        }
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        return choice;
+    public double[] getFoodP() {
+        return foodP;
     }
 
-    public static void setMenu(Scanner scanner, RestoMenu restoMenu) {
-        while (true) {
-            System.out.println("\nPengaturan Menu:");
-            System.out.println("1. Tambah Menu");
-            System.out.println("2. Ubah Harga");
-            System.out.println("3. Hapus Menu");
-            System.out.println("4. Kembali ke Menu Utama");
-
-            System.out.print("Masukkan opsi: ");
-            int ownerChoice = getIntInput(scanner);
-
-            switch (ownerChoice) {
-                case 1:
-                    addMenu(scanner, restoMenu);
-                    break;
-                case 2:
-                    changePrice(scanner, restoMenu);
-                    break;
-                case 3:
-                    deleteMenu(scanner, restoMenu);
-                    break;
-                case 4:
-                    return;
-                default:
-                    System.out.println("Invalid");
-            }
-        }
+    public String[] getDrink() {
+        return drink;
     }
 
-    private static void addMenu(Scanner scanner, RestoMenu restoMenu) {
-        System.out.print("Masukan Menu Baru: ");
-        String newItem = scanner.nextLine();
-
-        System.out.print("Masukan harga untuk " + newItem + ": ");
-        double newPrice = scanner.nextDouble();
-        scanner.nextLine();
-
-        System.out.println("Tambah " + newItem + " ke dalam menu, dengan harga " + newPrice);
-
-        confirm(scanner, restoMenu);
+    public double[] getDrinkP() {
+        return drinkP;
     }
 
-    private static void changePrice(Scanner scanner, RestoMenu restoMenu) {
-        System.out.println("Daftar Menu:");
-        displayMenu(restoMenu);
+    public void removeMenuItem(int menuIndex) {
+        if (menuIndex < food.length) {
+            String[] newFood = new String[food.length - 1];
+            double[] newFoodP = new double[foodP.length - 1];
 
-        System.out.print("Masukan nomor menu yang harganya akan diubah: ");
-        int menuNumber = getIntInput(scanner);
-        scanner.nextLine();
-
-        int itemIndex = menuNumber - 1;
-
-        if (itemIndex >= 0 && itemIndex < restoMenu.food.length + restoMenu.drink.length) {
-            String menuItem = (itemIndex < restoMenu.food.length) ? restoMenu.food[itemIndex] : restoMenu.drink[itemIndex - restoMenu.food.length];
-
-            System.out.println("Pilihan: " + menuItem);
-            System.out.print("Masukkan harga baru untuk " + menuItem + ": ");
-            double newPrice = scanner.nextDouble();
-            scanner.nextLine();
-
-            if (itemIndex < restoMenu.food.length) {
-                restoMenu.foodP[itemIndex] = newPrice;
-            } else {
-                restoMenu.drinkP[itemIndex - restoMenu.food.length] = newPrice;
+            int newIndex = 0;
+            for (int i = 0; i < food.length; i++) {
+                if (i != menuIndex) {
+                    newFood[newIndex] = food[i];
+                    newFoodP[newIndex] = foodP[i];
+                    newIndex++;
+                }
             }
 
-            confirm(scanner, restoMenu);
+            food = newFood;
+            foodP = newFoodP;
         } else {
-            System.out.println("Invalid");
-        }
-    }
+            String[] newDrink = new String[drink.length - 1];
+            double[] newDrinkP = new double[drinkP.length - 1];
 
-    private static void deleteMenu(Scanner scanner, RestoMenu restoMenu) {
-        System.out.println("Daftar Menu:");
-        displayMenu(restoMenu);
-
-        System.out.print("Masukkan nomor menu yang akan dihapus: ");
-        int menuNumber = getIntInput(scanner);
-        scanner.nextLine();
-
-        int itemIndex = menuNumber - 1;
-
-        if (itemIndex >= 0 && itemIndex < restoMenu.food.length + restoMenu.drink.length) {
-            String menuItem = (itemIndex < restoMenu.food.length) ? restoMenu.food[itemIndex] : restoMenu.drink[itemIndex - restoMenu.food.length];
-
-            System.out.println("Pilihan: " + menuItem);
-
-            if (itemIndex < restoMenu.food.length) {
-                restoMenu.food = removeItem(restoMenu.food, itemIndex);
-                restoMenu.foodP = removeItem(restoMenu.foodP, itemIndex);
-            } else {
-                restoMenu.drink = removeItem(restoMenu.drink, itemIndex - restoMenu.food.length);
-                restoMenu.drinkP = removeItem(restoMenu.drinkP, itemIndex - restoMenu.food.length);
+            int newIndex = 0;
+            for (int i = 0; i < drink.length; i++) {
+                if (i != (menuIndex - food.length)) {
+                    newDrink[newIndex] = drink[i];
+                    newDrinkP[newIndex] = drinkP[i];
+                    newIndex++;
+                }
             }
 
-            confirm(scanner, restoMenu);
-        } else {
-            System.out.println("Invalid");
+            drink = newDrink;
+            drinkP = newDrinkP;
+        }
+    }
+    public String formatCurrency(double amount) {
+        return "Rp " + (long) amount;
+    }
+
+    public void displayMenu() {
+        System.out.println("\n----- Menu -----");
+        System.out.println("Makanan:");
+        for (int i = 0; i < food.length; i++) {
+            String formattedPrice = formatCurrency(foodP[i]);
+            System.out.printf("%d. %-15s %s\n", i + 1, food[i], formattedPrice);
+        }
+
+        System.out.println("\nMinuman:");
+        for (int i = 0; i < drink.length; i++) {
+            String formattedPrice = formatCurrency(drinkP[i]);
+            System.out.printf("%d. %-15s %s\n", i + 1 + food.length, drink[i], formattedPrice);
         }
     }
 
-    private static void confirm(Scanner scanner, RestoMenu restoMenu) {
-        System.out.print("Apakah perubahan selesai? (Ya/Tidak): ");
-        String confirmation = scanner.nextLine().toLowerCase();
-
-        while (!confirmation.equals("ya") && !confirmation.equals("tidak")) {
-            System.out.println("Invalid");
-            System.out.print("Apakah perubahan selesai? (Ya/Tidak): ");
-            confirmation = scanner.nextLine().toLowerCase();
-        }
-
-        if (confirmation.equals("ya")) {
-            System.out.println("Perubahan berhasil diterapkan");
-        } else {
-            restoMenu = new RestoMenu();
-            System.out.println("Perubahan dibatalkan");
-        }
-    }
-
-    private static String[] removeItem(String[] array, int index) {
-        String[] newArray = new String[array.length - 1];
-        System.arraycopy(array, 0, newArray, 0, index);
-        System.arraycopy(array, index + 1, newArray, index, array.length - index - 1);
-        return newArray;
-    }
-
-    private static double[] removeItem(double[] array, int index) {
-        double[] newArray = new double[array.length - 1];
-        System.arraycopy(array, 0, newArray, 0, index);
-        System.arraycopy(array, index + 1, newArray, index, array.length - index - 1);
-        return newArray;
-    }
-
-    public static void custOrder(Scanner scanner, RestoMenu restoMenu) {
-        Map<String, Integer> order = new HashMap<>();
-
+    public void getOrder(Scanner scanner, Map<String, Integer> order) {
         while (true) {
-            displayMenu(restoMenu);
-            System.out.print("Masukkan pesanan anda (ketik 'selesai' untuk menyelesaikan pesanan): ");
+            System.out.print("Silahkan masukan pesanan (atau ketik 'selesai' untuk menyelesaikan pesanan): ");
             String choice = scanner.nextLine();
 
             if (choice.equalsIgnoreCase("selesai")) {
                 break;
             }
 
-            if (!validChoice(choice, restoMenu)) {
-                System.out.println("Invalid");
-                continue;
+            int itemIndex = -1;
+            for (int i = 0; i < food.length; i++) {
+                if (choice.equalsIgnoreCase(food[i])) {
+                    itemIndex = i;
+                    break;
+                }
             }
-
-            System.out.print("Masukkan jumlah: ");
-            int quantity = getIntInput(scanner);
-            scanner.nextLine();
-
-            order.put(choice, order.getOrDefault(choice, 0) + quantity);
-        }
-
-        double subtotal = calculateTotal(order, restoMenu);
-        double tax = calculateTax(subtotal);
-        double serviceFee = 20000.0;
-        double total = subtotal + tax + serviceFee;
-
-        List<String> promotions = new ArrayList<>();
-
-        if (subtotal > 50000.0) {
-            promotions = drinkPromo(order, restoMenu);
-        }
-
-        double discount = 0.0;
-        if (total > 100000.0) {
-            discount = 0.1 * total;
-            total -= discount;
-        }
-
-        displayBill(order, total, promotions, discount, restoMenu);
-    }
-
-
-    private static boolean validChoice(String choice, RestoMenu restoMenu) {
-        for (String foodItem : restoMenu.food) {
-            if (choice.equalsIgnoreCase(foodItem)) {
-                return true;
+            if (itemIndex >= 0) {
+                System.out.print("Jumlah: ");
+                int quantity = scanner.nextInt();
+                scanner.nextLine();
+                order.put(food[itemIndex], order.getOrDefault(food[itemIndex], 0) + quantity);
+            } else {
+                itemIndex = -1;
+                for (int i = 0; i < drink.length; i++) {
+                    if (choice.equalsIgnoreCase(drink[i])) {
+                        itemIndex = i;
+                        break;
+                    }
+                }
+                if (itemIndex >= 0) {
+                    System.out.print("Jumlah: ");
+                    int quantity = scanner.nextInt();
+                    scanner.nextLine();
+                    order.put(drink[itemIndex], order.getOrDefault(drink[itemIndex], 0) + quantity);
+                } else {
+                    System.out.println("Invalid");
+                }
             }
         }
-        for (String drinkItem : restoMenu.drink) {
-            if (choice.equalsIgnoreCase(drinkItem)) {
-                return true;
-            }
-        }
-        return false;
     }
 
-    private static void displayMenu(RestoMenu restoMenu) {
-        System.out.println("Makanan:");
-        for (int i = 0; i < restoMenu.food.length; i++) {
-            String formattedPrice = formatCurrency(restoMenu.foodP[i]);
-            System.out.printf("%d. %-20s %-15s%n", i + 1, restoMenu.food[i], formattedPrice);
-        }
-
-        System.out.println("Minuman:");
-        for (int i = 0; i < restoMenu.drink.length; i++) {
-            String formattedPrice = formatCurrency(restoMenu.drinkP[i]);
-            System.out.printf("%d. %-20s %-15s%n", i + 1 + restoMenu.food.length, restoMenu.drink[i], formattedPrice);
-        }
-    }
-
-    private static String formatCurrency(double amount) {
-        return "Rp " + (long) amount;
-    }
-
-    private static double calculateTotal(Map<String, Integer> order, RestoMenu restoMenu) {
+    public double calculateTotal(Map<String, Integer> order) {
         double total = 0.0;
-
         for (String item : order.keySet()) {
             int quantity = order.get(item);
             int itemIndex = -1;
-            for (int i = 0; i < restoMenu.food.length; i++) {
-                if (item.equals(restoMenu.food[i])) {
+            for (int i = 0; i < food.length; i++) {
+                if (item.equals(food[i])) {
                     itemIndex = i;
                     break;
                 }
             }
             if (itemIndex >= 0) {
-                total += restoMenu.foodP[itemIndex] * quantity;
+                total += foodP[itemIndex] * quantity;
             }
             itemIndex = -1;
-            for (int i = 0; i < restoMenu.drink.length; i++) {
-                if (item.equals(restoMenu.drink[i])) {
+            for (int i = 0; i < drink.length; i++) {
+                if (item.equals(drink[i])) {
                     itemIndex = i;
                     break;
                 }
             }
             if (itemIndex >= 0) {
-                total += restoMenu.drinkP[itemIndex] * quantity;
+                total += drinkP[itemIndex] * quantity;
             }
         }
         return total;
     }
 
-    private static double calculateTax(double subtotal) {
+    public double calculateTax(double subtotal) {
         return 0.1 * subtotal;
     }
 
-    private static List<String> drinkPromo(Map<String, Integer> order, RestoMenu restoMenu) {
-        List<String> promotions = new ArrayList<>();
-        Map<String, Integer> claimedDrinks = new HashMap<>();
+    public String drinkPromo(Map<String, Integer> order) {
+        String promotion = "";
+        Map<String, Integer> eligibleDrinks = new HashMap<>();
 
-        for (String category : restoMenu.drink) {
-            int quantity = order.getOrDefault(category, 0);
-            if (quantity > 0) {
-                int claimed = claimedDrinks.getOrDefault(category, 0);
-                int freeQt = quantity / 2;
-                claimedDrinks.put(category, claimed + freeQt);
-                if (freeQt > 0) {
-                    promotions.add("Promo: Buy One Get One " + category + " (" + freeQt + " gratis)");
-                }
+        // Iterate over the keys in the order map
+        for (String category : order.keySet()) {
+            // Check if the category is a drink
+            if (Arrays.asList(drink).contains(category)) {
+                int quantity = order.getOrDefault(category, 0);
+                eligibleDrinks.put(category, quantity);
             }
         }
 
-        return promotions;
+        int totalEligibleDrinks = eligibleDrinks.values().stream().mapToInt(Integer::intValue).sum();
+
+        if (totalEligibleDrinks >= 2) {
+            // Iterate over the eligible drinks
+            for (String category : eligibleDrinks.keySet()) {
+                int quantity = eligibleDrinks.getOrDefault(category, 0);
+                int freeQuantity = quantity / 2;
+                order.put(category, quantity - freeQuantity);
+                promotion = "Promo: Buy One Get One Minuman (" + freeQuantity + ") " + category;
+            }
+        }
+        return promotion;
     }
 
-    private static void displayBill(Map<String, Integer> order, double total, List<String> promotions, double discount, RestoMenu restoMenu) {
-        System.out.println("-------- Bill --------");
-        System.out.printf("%-20s %-15s %-10s %-15s%n", "Nama Menu", "Harga", "Jumlah", "Total Harga");
+    public void displayBill(Map<String, Integer> order, double subtotal, double tax, double serviceFee, String promotion, double discount, double total) {
+        System.out.println("\n----- Bill -----");
+        System.out.printf("%-15s %-15s %-15s %-15s\n", "Menu Item", "Price", "Order Quantity", "Total Price");
 
-        for (String item : order.keySet()) {
-            int quantity = order.get(item);
-            double itemPrice = 0.0;
-            String itemName = "";
-
-            int itemIndex = -1;
-            for (int i = 0; i < restoMenu.food.length; i++) {
-                if (item.equals(restoMenu.food[i])) {
-                    itemIndex = i;
-                    itemPrice = restoMenu.foodP[i];
-                    itemName = item;
-                    break;
-                }
-            }
-
-            itemIndex = -1;
-            for (int i = 0; i < restoMenu.drink.length; i++) {
-                if (item.equals(restoMenu.drink[i])) {
-                    itemIndex = i;
-                    itemPrice = restoMenu.drinkP[i];
-                    itemName = item;
-                    break;
-                }
-            }
-
+        for (String item : food) {
+            int quantity = order.getOrDefault(item, 0);
             if (quantity > 0) {
-                String formattedPrice = formatCurrency(itemPrice);
-                double totalItemPrice = itemPrice * quantity;
-                String formattedTotalItemPrice = formatCurrency(totalItemPrice);
-                System.out.printf("%-20s %-15s %-10d %-15s%n", itemName, formattedPrice, quantity, formattedTotalItemPrice);
+                int itemIndex = -1;
+                for (int i = 0; i < food.length; i++) {
+                    if (item.equals(food[i])) {
+                        itemIndex = i;
+                        break;
+                    }
+                }
+                if (itemIndex >= 0) {
+                    String itemName = item;
+                    String formattedPrice = formatCurrency(foodP[itemIndex]);
+                    double totalItemPrice = foodP[itemIndex] * quantity;
+                    String formattedTotalItemPrice = formatCurrency(totalItemPrice);
+                    System.out.printf("%-15s %-15s %-15d %-15s\n", itemName, formattedPrice, quantity, formattedTotalItemPrice);
+                }
             }
         }
 
-        String subtotal = formatCurrency(calculateTotal(order, restoMenu));
-        String tax = formatCurrency(calculateTax(calculateTotal(order, restoMenu)));
-        String serviceFee = formatCurrency(20000.0);
-        String formattedTotal = formatCurrency(total);
-
-        System.out.println("");
-        System.out.printf("%-45s %s%n", "Subtotal:", subtotal);
-        System.out.printf("%-45s %s%n", "Pajak (10%):", tax);
-        System.out.printf("%-45s %s%n", "Biaya Pelayanan:", serviceFee);
-        System.out.println("");
-        System.out.printf("%-45s %s%n", "Total:", formattedTotal);
-
-        for (String promotion : promotions) {
-            System.out.println(promotion);
+        for (String item : drink) {
+            int quantity = order.getOrDefault(item, 0);
+            if (quantity > 0) {
+                int itemIndex = -1;
+                for (int i = 0; i < drink.length; i++) {
+                    if (item.equals(drink[i])) {
+                        itemIndex = i;
+                        break;
+                    }
+                }
+                if (itemIndex >= 0) {
+                    String itemName = item;
+                    String formattedPrice = formatCurrency(drinkP[itemIndex]);
+                    double totalItemPrice = drinkP[itemIndex] * quantity;
+                    String formattedTotalItemPrice = formatCurrency(totalItemPrice);
+                    System.out.printf("%-15s %-15s %-15d %-15s\n", itemName, formattedPrice, quantity, formattedTotalItemPrice);
+                }
+            }
         }
 
-        if (discount > 0) {
-            System.out.printf("%-45s %s%n", "Discount (10%):", formatCurrency(discount));
-            total -= discount;
-            String formattedTotalAfterDiscount = formatCurrency(total);
-            System.out.printf("%-45s %s%n", "Total:", formattedTotalAfterDiscount);
+        // Mencetak data-data yang dibutuhkan dalam struk pesanan
+        System.out.println(" ");
+        System.out.printf("%-15s %-15s\n", "Subtotal:", formatCurrency(subtotal));
+        System.out.printf("%-15s %-15s\n", "Tax (10%):", formatCurrency(tax));
+        System.out.printf("%-15s %-15s\n", "Service Fee:", formatCurrency(serviceFee));
+        System.out.printf("%-15s %-15s\n", "Promotion:", promotion);
+        System.out.printf("%-15s %-15s\n", "Discount:", formatCurrency(discount));
+        System.out.printf("%-15s %-15s\n", "Total:", formatCurrency(total));
+    }
+}
+
+public class RestoApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Membuat instance untuk kelas RestoMenu dan menampilkan menu
+        RestoMenu restoMenu = new RestoMenu();
+
+        Map<String, Integer> order = new HashMap<>();
+
+        while (true) {
+            System.out.println("\n----- Menu Utama -----");
+            System.out.println("1. Pemesanan");
+            System.out.println("2. Pengelolaan Menu");
+            System.out.println("3. Keluar");
+
+            System.out.print("Masukkan pilihan: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    // Membuat pesanan
+                    displayNumbering(restoMenu);
+                    restoMenu.getOrder(scanner, order);
+
+                    double subtotal = restoMenu.calculateTotal(order);
+                    double tax = restoMenu.calculateTax(subtotal);
+                    double serviceFee = 20000.0;
+                    double total = subtotal + tax + serviceFee;
+
+                    String promotion = "";
+                    if (total > 50000.0) {
+                        promotion = restoMenu.drinkPromo(order);
+                    }
+
+                    // Menghitung diskon
+                    double discount = 0.0;
+                    if (total > 100000.0) {
+                        discount = 0.1 * total;
+                        total -= discount;
+                    }
+
+                    // Mencetak struk pesanan
+                    restoMenu.displayBill(order, subtotal, tax, serviceFee, promotion, discount, total);
+                    break;
+
+                case 2:
+                    // Mengelola Menu
+                    manageMenu(scanner, restoMenu);
+                    break;
+
+                case 3:
+                    // Keluar
+                    System.out.println("Sistem ditutup");
+                    scanner.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid");
+            }
+        }
+    }
+
+    private static void manageMenu(Scanner scanner, RestoMenu restoMenu) {
+        while (true) {
+            System.out.println("\n----- Pengelolaan Menu -----");
+            System.out.println("1. Tambah Menu");
+            System.out.println("2. Ubah Harga");
+            System.out.println("3. Hapus Menu");
+            System.out.println("4. Kembali ke Menu Utama");
+
+            System.out.print("Masukkan pilihan: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    // Menambahkan menu baru
+                    addMenu(scanner, restoMenu);
+                    break;
+
+                case 2:
+                    // Mengubah harga pada suatu menu
+                    changePrice(scanner, restoMenu);
+                    break;
+
+                case 3:
+                    // Menghapus suatu menu
+                    deleteMenu(scanner, restoMenu);
+                    break;
+
+                case 4:
+                    // Kembali ke menu utama
+                    return;
+
+                default:
+                    System.out.println("Invalid");
+            }
+        }
+    }
+
+    private static void displayNumbering(RestoMenu restoMenu) {
+        System.out.println("\n----- Menu dengan Nomor -----");
+        System.out.println("Makanan:");
+        String[] food = restoMenu.getFood();
+        double[] foodP = restoMenu.getFoodP();
+        for (int i = 0; i < food.length; i++) {
+            String formattedPrice = restoMenu.formatCurrency(foodP[i]);
+            System.out.printf("%d. %-15s %s\n", i + 1, food[i], formattedPrice);
+        }
+
+        System.out.println("\nMinuman:");
+        String[] drink = restoMenu.getDrink();
+        double[] drinkP = restoMenu.getDrinkP();
+        for (int i = 0; i < drink.length; i++) {
+            String formattedPrice = restoMenu.formatCurrency(drinkP[i]);
+            System.out.printf("%d. %-15s %s\n", i + 1 + food.length, drink[i], formattedPrice);
+        }
+    }
+
+    private static int getMenuIndexByNumber(int menuNumber, RestoMenu restoMenu) {
+        if (menuNumber >= 1 && menuNumber <= (restoMenu.getFood().length + restoMenu.drink.length)) {
+            if (menuNumber <= restoMenu.getFood().length) {
+                return menuNumber - 1;
+            } else {
+                return menuNumber - 1 - restoMenu.getFood().length;
+            }
+        } else {
+            return -1;
+        }
+    }
+
+    private static void addMenu(Scanner scanner, RestoMenu restoMenu) {
+        System.out.print("Masukkan nama menu baru: ");
+        String newName = scanner.nextLine();
+
+        System.out.print("Masukkan harga dari: " + newName);
+        double newPrice = scanner.nextDouble();
+        scanner.nextLine();
+
+        String[] newDrink = new String[restoMenu.drink.length + 1];
+        double[] newDrinkP = new double[restoMenu.drinkP.length + 1];
+
+        System.arraycopy(restoMenu.drink, 0, newDrink, 0, restoMenu.drink.length);
+        System.arraycopy(restoMenu.drinkP, 0, newDrinkP, 0, restoMenu.drinkP.length);
+
+        newDrink[newDrink.length - 1] = newName;
+        newDrinkP[newDrinkP.length - 1] = newPrice;
+
+        restoMenu.drink = newDrink;
+        restoMenu.drinkP = newDrinkP;
+
+        System.out.println("Menu telah ditambahkan");
+    }
+
+    private static void changePrice(Scanner scanner, RestoMenu restoMenu) {
+        System.out.println("\n----- Daftar Menu -----");
+        displayNumbering(restoMenu);
+
+        System.out.print("Masukkan nomor: ");
+        int menuNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        int menuIndex = getMenuIndexByNumber(menuNumber, restoMenu);
+
+        if (menuIndex != -1) {
+            System.out.print("Masukkan harga baru: ");
+            double newPrice = scanner.nextDouble();
+            scanner.nextLine();
+
+            System.out.print("Apakah perubahan selesai? (Ya/Tidak): ");
+            String confirmation = scanner.nextLine();
+
+            if (confirmation.equalsIgnoreCase("Ya")) {
+                updatePrice(restoMenu, menuIndex, newPrice);
+                System.out.println("Harga telah diperbarui");
+            } else if (confirmation.equalsIgnoreCase("Tidak")) {
+                System.out.println("Perubahan dibatalkan");
+            } else {
+                System.out.println("Invalid");
+            }
+        } else {
+            System.out.println("Menu tidak tersedia.");
+        }
+    }
+
+    private static void deleteMenu(Scanner scanner, RestoMenu restoMenu) {
+        System.out.println("\n----- Daftar Menu -----");
+        displayNumbering(restoMenu);
+
+        System.out.print("Masukkan nomor: ");
+        int menuNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        int menuIndex = getMenuIndexByNumber(menuNumber, restoMenu);
+
+        if (menuIndex != -1) {
+            System.out.print("Apakah Anda yakin ingin menghapus menu ini? (Ya/Tidak): ");
+            String confirmation = scanner.nextLine();
+
+            if (confirmation.equalsIgnoreCase("Ya")) {
+                restoMenu.removeMenuItem(menuIndex);
+                System.out.println("Menu telah dihapus");
+            } else if (confirmation.equalsIgnoreCase("Tidak")) {
+                System.out.println("Penghapusan dibatalkan");
+            } else {
+                System.out.println("Invalid");
+            }
+        } else {
+            System.out.println("Menu tidak sesuai.");
+        }
+    }
+
+    private static void updatePrice(RestoMenu restoMenu, int menuIndex, double newPrice) {
+        if (menuIndex < restoMenu.getFood().length) {
+            restoMenu.getFoodP()[menuIndex] = newPrice;
+        } else {
+            restoMenu.drinkP[menuIndex - restoMenu.getFood().length] = newPrice;
+        }
+    }
+
+    private static void removeMenu(Scanner scanner, RestoMenu restoMenu) {
+        System.out.println("\n----- Daftar Menu -----");
+        displayNumbering(restoMenu);
+
+        System.out.print("Masukkan nomor: ");
+        int menuNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        int menuIndex = getMenuIndexByNumber(menuNumber, restoMenu);
+
+        if (menuIndex != -1) {
+            System.out.print("Apakah Anda yakin ingin menghapus menu ini? (Ya/Tidak): ");
+            String confirmation = scanner.nextLine();
+
+            if (confirmation.equalsIgnoreCase("Ya")) {
+                restoMenu.removeMenuItem(menuIndex);
+                System.out.println("Menu telah dihapus");
+            } else if (confirmation.equalsIgnoreCase("Tidak")) {
+                System.out.println("Penghapusan dibatalkan");
+            } else {
+                System.out.println("Invalid");
+            }
+        } else {
+            System.out.println("Menu tidak sesuai.");
         }
     }
 }
