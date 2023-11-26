@@ -146,19 +146,18 @@ class Menu {
                     double harga = Double.parseDouble(parts[1]);
                     String kategori = parts[2];
 
-                    // Membuat objek berdasarkan kategori yang terbaca
                     MenuItem newItem;
                     if (kategori.equalsIgnoreCase("makanan")) {
-                        newItem = new Makanan(nama, harga, kategori, "jenis_makanan"); // Ganti "jenis_makanan" dengan jenis makanan yang sesuai
+                        newItem = new Makanan(nama, harga, kategori, parts[3]); // parts[3] adalah jenis makanan
                     } else if (kategori.equalsIgnoreCase("minuman")) {
-                        newItem = new Minuman(nama, harga, kategori, "jenis_minuman"); // Ganti "jenis_minuman" dengan jenis minuman yang sesuai
+                        newItem = new Minuman(nama, harga, kategori, parts[3]); // parts[3] adalah jenis minuman
                     } else if (kategori.equalsIgnoreCase("diskon")) {
-                        double diskon = Double.parseDouble(parts[1]);
+                        double diskon = Double.parseDouble(parts[1]);// parts[1] adalah infromasi harga
                         newItem = new Diskon(nama, harga, kategori, diskon);
                     } else {
                         // Kategori tidak valid
-                        System.out.println("Kategori tidak valid: " + kategori);
-                        continue;
+                        System.out.println("Kategori tidak dikenali: " + kategori);
+                        continue; // atau tindakan lain sesuai logika aplikasi Anda
                     }
 
                     // Tambahkan item menu ke daftar menu
